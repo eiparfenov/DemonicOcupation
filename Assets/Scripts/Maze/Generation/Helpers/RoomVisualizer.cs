@@ -15,7 +15,7 @@ namespace Maze.Generation.Helpers
             rectTransform.position = ((Vector3)(cell.BottomLeft.ToVector3Int() + cell.TopRight.ToVector3Int())) / 2;
             rectTransform.sizeDelta = cell.Size;
             image.color = Random.ColorHSV(0, 1, 0, 1, .5f, 1, .3f, .3f);
-            text.text = cell.SeparatingTag;
+            //text.text = cell.SeparatingTag;
         }
     }
 }

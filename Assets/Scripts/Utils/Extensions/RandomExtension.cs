@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Utils.Extensions
@@ -6,24 +8,23 @@ namespace Utils.Extensions
     {
         public static bool RandomBool(float probability = .5f) => Random.value < probability;
 
-        public static (int, int)[] RandomGates(int start, int end, int gateSize = 8, int countMin = 1, int countMax = 3)
+        public static List<int> RandomGates(int start, int end, int gateSize, int count)
         {
-            var count = Random.Range(countMin, countMax + 1);
             var separationsLength = end - start - gateSize * count;
             var separations = RandomSeparations(separationsLength, count + 1);
-            var result = new (int, int)[count];
+            var result = new int[count];
             var pos = start;
             for (int i = 0; i < count; i++)
             {
                 pos += separations[i];
-                result[i] = (pos, pos + gateSize);
+                result[i] = pos;
                 pos += gateSize;
             }
 
-            return result;
+            return result.ToList();
         }
 
-        public static int[] RandomSeparations(int total, int count, float variation = .8f)
+        public static List<int> RandomSeparations(int total, int count, float variation = .8f)
         {
             var result = new int[count];
             var max = (int)(total * (1 + variation) / count);
@@ -35,7 +36,7 @@ namespace Utils.Extensions
                 result[i] = Mathf.Clamp(result[i], total - max * remains, total - min * remains);
                 total -= result[i];
             }
-            return result;
+            return result.ToList();
         }
     }
 }

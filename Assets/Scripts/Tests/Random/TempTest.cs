@@ -1,5 +1,7 @@
 using System.Linq;
+using Maze;
 using NaughtyAttributes;
+using Shared.Sides;
 using UnityEngine;
 using Utils;
 using Utils.Extensions;
@@ -15,17 +17,8 @@ namespace Tests.Random
         [Button()]
         private void Test()
         {
-            var gates = RandomExtension.RandomGates(0, length, gatesSize, gatesCount, gatesCount);
-            print(string.Join(", ", gates.Select(x=> $"({x.Item1}, {x.Item2})")));
-            var s = "";
-            for (int i = 0; i < length; i++)
-            {
-                if (gates.Any(x => x.Item1 < i && i + 1 < x.Item2)) s += "_";
-                else if (gates.Any(x => x.Item1 == i)) s += "\\";
-                else if (gates.Any(x => x.Item2 - 1 == i)) s += "/";
-                else s += "*";
-            }
-            print(s);
+            var cell = Cell.FromCoords(new Vector2Int(-5, -5), new Vector2Int(10, 5), null);
+            Debug.Log(string.Join(" ", cell.PossibleSeparationPoses(Side.Bottom,10)));
         }
 
         [Button()]
