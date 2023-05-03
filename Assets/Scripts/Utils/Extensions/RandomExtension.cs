@@ -17,8 +17,8 @@ namespace Utils.Extensions
             for (int i = 0; i < count; i++)
             {
                 pos += separations[i];
-                result[i] = pos;
                 pos += gateSize;
+                result[i] = pos;
             }
 
             return result.ToList();

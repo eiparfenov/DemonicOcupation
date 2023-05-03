@@ -7,6 +7,7 @@ namespace Maze
     public class Gate
     {
         public Vector2Int TopRight { get; set; }
+        public Vector2Int BottomLeft => TopRight - Direction.VectorCross() * Length;
         public int Length { get; set; }
         public Stack<Cell> TopRightCells { get; set; }
         public Stack<Cell> BottomLeftCells { get; set; }
@@ -19,7 +20,6 @@ namespace Maze
         {
             TopRightCells = new Stack<Cell>();
             BottomLeftCells = new Stack<Cell>();
-            Debug.Log("Gate created");
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Shared.Sides;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Maze
@@ -10,6 +11,7 @@ namespace Maze
     {
         public Vector2Int TopRight { get; private set; }
         public Vector2Int BottomLeft { get; private set; }
+        public Vector2Int Center => (TopRight + BottomLeft) / 2;
         public Vector2Int Size => TopRight - BottomLeft;
         public List<Gate> Gates { get; }
         public List<Cell> Children { get; }
@@ -42,14 +44,27 @@ namespace Maze
         {
             if (side.CorrespondingDirection().MagnitudeCross(BottomLeft) + roomOffset >=
                 side.CorrespondingDirection().MagnitudeCross(Size) - 2 * roomOffset) return new List<int>();
+
+            var result = new List<int>();
+            var gates = GatesOnSide(side);
+            foreach (var possiblePos in Enumerable.Range(side.CorrespondingDirection().MagnitudeCross(BottomLeft) + roomOffset, 
+                         side.CorrespondingDirection().MagnitudeCross(Size) - 2 * roomOffset))
+            {
+                if(!gates.Any(gate => possiblePos > side.CorrespondingDirection().MagnitudeCross(gate.BottomLeft) &&
+                   side.CorrespondingDirection().MagnitudeCross(gate.TopRight) > possiblePos))
+                {
+                    result.Add(possiblePos);
+                }
+            }
             
-            
-            return Enumerable.Range(side.CorrespondingDirection().MagnitudeCross(BottomLeft) + roomOffset,
-                    side.CorrespondingDirection().MagnitudeCross(Size) - 2 * roomOffset)
-                .Where(pos => !GatesOnSide(side)
-                    .Any(gate => side.CorrespondingDirection().MagnitudeCross(gate.TopRight) > pos &&
-                                 pos >= side.CorrespondingDirection().MagnitudeCross(gate.TopRight) + gate.Length))
-                .ToList();
+            //var result = Enumerable.Range(side.CorrespondingDirection().MagnitudeCross(BottomLeft) + roomOffset,
+            //        side.CorrespondingDirection().MagnitudeCross(Size) - 2 * roomOffset)
+            //    .Where(pos => !GatesOnSide(side)
+            //        .Any(gate => side.CorrespondingDirection().MagnitudeCross(gate.TopRight) > pos &&
+            //                     pos >= side.CorrespondingDirection().MagnitudeCross(gate.TopRight) + gate.Length))
+            //    .ToList();
+
+            return result;
         }
 
         public static Cell FromCoords(Vector2Int bottomLeft, Vector2Int topRight, Cell parent)
