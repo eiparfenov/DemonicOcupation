@@ -58,7 +58,7 @@ namespace Maze.Generation
 
         private List<Cell> Separate(Cell startCell)
         {
-            return settings.ToTest.Separate(startCell).SelectMany(x => settings.ToTest.Separate(x)).ToList();
+            return settings.ToTest.Separate(startCell); //.SelectMany(x => settings.ToTest.Separate(x)).ToList();
         }
 
         private void ShowVisualizers(List<Cell> cells)

@@ -76,6 +76,16 @@ namespace Maze
             };
             return result;
         }
+
+        public static Cell FromSides(int top, int right, int bottom, int left, Cell parent)
+        {
+            var result = new Cell(parent)
+            {
+                BottomLeft = new Vector2Int(left, bottom),
+                TopRight = new Vector2Int(right, top)
+            };
+            return result;
+        }
         private List<Gate> GatesOnSide(Side side)
         {
             return side switch
