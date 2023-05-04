@@ -15,23 +15,39 @@ namespace Maze.Generation
         [SerializeField] private RoomVisualizer debugVisualizerPref;
 
         [SerializeField] private RoomVisualizer[] visualizers;
-        [Button()]
+        [SerializeField] private int cellToDraw;
+
+        private List<Cell> _cellsToDraw;
+        private Dictionary<int, Tilemap> _tilemaps;
+        [Button()] 
         private void Generate()
         {
             Clear();
-            var tilemaps = GetTilemaps();
+            _tilemaps = GetTilemaps();
             var startCell = Cell.FromCoords(
                 Vector2Int.one * -settings.Size,
                 Vector2Int.one * settings.Size, 
                 null);
-            var cellsToDraw = Separate(startCell);
-            foreach (var cell in cellsToDraw)
-            {
-                settings.DebugDrawer.Draw(cell, tilemaps);
-                settings.DebugGatesDrawer.Draw(cell, tilemaps);
-            }
-            ShowVisualizers(cellsToDraw);
+            _cellsToDraw = Separate(startCell);
+            ShowVisualizers(_cellsToDraw);
         }
+        [Button()]
+        private void DrawAllCells()
+        {
+            foreach (var cell in _cellsToDraw)
+            {
+                settings.DebugDrawer.Draw(cell, _tilemaps);
+                settings.DebugGatesDrawer.Draw(cell, _tilemaps);
+            }
+        }
+        [Button()]
+        private void DrawCell()
+        {
+            var cell = _cellsToDraw[cellToDraw];
+            settings.DebugDrawer.Draw(cell, _tilemaps);
+            settings.DebugGatesDrawer.Draw(cell, _tilemaps);
+        }
+
 
         [Button()]
         private void Clear()

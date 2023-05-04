@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Maze.Generation.Separation.GatesGenerators;
 using Shared.Sides;
 using UnityEngine;
 using Utils.Extensions;
@@ -11,6 +12,7 @@ namespace Maze.Generation.Separation.Separators
     {
         [SerializeField] private int corridorAdditionalWidth;
         [SerializeField] private int minSideLength;
+        [SerializeField] private GatesGeneratorBase gatesGenerator;
         public override List<Cell> Separate(Cell parentCell)
         {
             // Finds all gates
@@ -27,13 +29,12 @@ namespace Maze.Generation.Separation.Separators
                         {
                             if (gate.Direction != corridor.Direction) return false;
 
-                            var corridorUp = corridor.Item2;
+                            var corridorHigh = corridor.Item2;
                             var corridorLow = corridor.Item1;
                             var gateLow = gate.Direction.MagnitudeCross(gate.BottomLeft);
-                            var gateUp = gate.Direction.MagnitudeCross(gate.TopRight);
-                            var result = gateLow < corridorUp && corridorUp < gateUp ||
-                                   gateLow < corridorLow && corridorLow < gateUp;
-                            Debug.Log($"Corridor: {corridorLow}, {corridorUp}; Gate: {gateLow}, {gateUp}; {result}");
+                            var gateHigh = gate.Direction.MagnitudeCross(gate.TopRight);
+                            var result = gateLow < corridorHigh && corridorHigh < gateHigh ||
+                                   gateLow < corridorLow && corridorLow < gateHigh;
                             return result;
                         }
                     )
@@ -45,6 +46,8 @@ namespace Maze.Generation.Separation.Separators
             // Selects closest to center corridor
             var cellCenter = parentCell.Center;
             var corridorInfo = possibleCorridors.ItemWithMin(corridor => Mathf.Abs((corridor.Item1 + corridor.Item2) / 2 - corridor.Direction.MagnitudeCross(cellCenter)));
+            
+            // The direction of corridor
             var direction = corridorInfo.Direction;
             
             // Creates corridor cell
@@ -53,13 +56,14 @@ namespace Maze.Generation.Separation.Separators
                 direction.Project(parentCell.TopRight) + direction.VectorCross() * corridorInfo.Item2,
                 parentCell);
 
+            // Creates side cells
             var blCells = SeparateAlongCorridor(parentCell.BottomLeft,
                 direction.Project(parentCell.TopRight) + direction.ProjectCross(corridorCell.BottomLeft),
-                direction, parentCell);
+                direction, parentCell, false, corridorCell);
             var trCells = SeparateAlongCorridor(
                 direction.Project(parentCell.BottomLeft) + direction.ProjectCross(corridorCell.TopRight),
                 parentCell.TopRight,
-                direction, parentCell);
+                direction, parentCell, true, corridorCell);
 
             var result = new List<Cell>() { corridorCell };
             result.AddRange(blCells);
@@ -67,19 +71,38 @@ namespace Maze.Generation.Separation.Separators
             return result;
         }
 
-        private List<Cell> SeparateAlongCorridor(Vector2Int bottomLeft, Vector2Int topRight, Direction direction, Cell parentCell)
+        private List<Cell> SeparateAlongCorridor(Vector2Int bottomLeft, Vector2Int topRight, Direction direction, Cell parentCell, bool up, Cell corridor)
         {
             var size = topRight - bottomLeft;
             var roomsCount = Mathf.RoundToInt((float)direction.Magnitude(size) / direction.MagnitudeCross(size));
             var roomLength = (float)direction.Magnitude(size) / roomsCount;
 
+            var possiblePoses =
+                parentCell.PossibleSeparationPoses(up ? direction.Cross().TopRightSide() : direction.Cross().BottomLeftSide(), 0);
             var result = new List<Cell>();
             for (int i = 0; i < roomsCount; i++)
             {
-                result.Add(Cell.FromCoords(
-                    direction.ProjectCross(bottomLeft) + direction.Vector() * (direction.Magnitude(bottomLeft) + Mathf.RoundToInt(i * roomLength)),
-                    direction.ProjectCross(topRight) + direction.Vector() * (direction.Magnitude(bottomLeft) + Mathf.RoundToInt((i + 1) * roomLength)),
-                    parentCell));
+                var sepLow = (direction.Magnitude(bottomLeft) + Mathf.RoundToInt(i * roomLength));
+                var sepHigh = (direction.Magnitude(bottomLeft) + Mathf.RoundToInt((i + 1) * roomLength));
+
+                sepLow = possiblePoses.ItemWithMin(x => Mathf.Abs(sepLow - x));
+                sepHigh = possiblePoses.ItemWithMin(x => Mathf.Abs(sepHigh - x));
+                if (i + 1 == roomsCount) sepHigh = direction.Magnitude(parentCell.TopRight);
+                
+                var cell =Cell.FromCoords(
+                    direction.ProjectCross(bottomLeft) + direction.Vector() * sepLow,
+                    direction.ProjectCross(topRight) + direction.Vector() * sepHigh,
+                    parentCell);
+
+                if (up)
+                {
+                    gatesGenerator.AddGates(corridor, cell, direction.Cross());
+                }
+                else
+                {
+                    gatesGenerator.AddGates(cell, corridor, direction.Cross());
+                }
+                result.Add(cell);
             }
 
             return result;

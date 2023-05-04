@@ -13,19 +13,23 @@ namespace Maze
         public Vector2Int BottomLeft { get; private set; }
         public Vector2Int Center => (TopRight + BottomLeft) / 2;
         public Vector2Int Size => TopRight - BottomLeft;
-        public List<Gate> Gates { get; }
-        public List<Cell> Children { get; }
+        public List<Gate> Gates { get; private set; }
+        public List<Cell> Children { get; private set; }
 
-        private Cell(Cell parent)
+        private Cell()
+        {
+        }
+
+        private void FillGates(Cell parent)
         {
             Children = new List<Cell>();
             if (parent != null)
             {
                 Gates = parent.Gates
-                    .Where(gate => gate.TopRight.x == TopRight.x ||
-                                   gate.TopRight.y == TopRight.y ||
-                                   gate.TopRight.x == BottomLeft.x ||
-                                   gate.TopRight.y == BottomLeft.y || true)
+                    .Where(gate => BottomLeft.x <= gate.BottomLeft.x + 1 &&
+                                   BottomLeft.y <= gate.BottomLeft.y + 1 &&
+                                   gate.TopRight.x <= TopRight.x + 1 &&
+                                   gate.TopRight.y <= TopRight.y + 1)
                     .ToList();
                 parent.Children.Add(this);
             }
@@ -34,6 +38,7 @@ namespace Maze
                 Gates = new List<Gate>();
             }
         }
+
         /// <summary>
         /// Finds all poses where there are no gates
         /// </summary>
@@ -69,21 +74,23 @@ namespace Maze
 
         public static Cell FromCoords(Vector2Int bottomLeft, Vector2Int topRight, Cell parent)
         {
-            var result = new Cell(parent)
+            var result = new Cell()
             {
                 BottomLeft = bottomLeft,
                 TopRight = topRight
             };
+            result.FillGates(parent);
             return result;
         }
 
         public static Cell FromSides(int top, int right, int bottom, int left, Cell parent)
         {
-            var result = new Cell(parent)
+            var result = new Cell()
             {
                 BottomLeft = new Vector2Int(left, bottom),
                 TopRight = new Vector2Int(right, top)
             };
+            result.FillGates(parent);
             return result;
         }
         private List<Gate> GatesOnSide(Side side)

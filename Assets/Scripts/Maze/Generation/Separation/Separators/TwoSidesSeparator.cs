@@ -51,7 +51,6 @@ namespace Maze.Generation.Separation.Separators
             {
                 return null;
             }
-            Debug.Log(separationPoses.Count);
             
             // Select separator
             var separator = separationPoses.RandomOrDefault();
