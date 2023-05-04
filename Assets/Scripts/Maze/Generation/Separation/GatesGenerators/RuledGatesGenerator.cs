@@ -5,14 +5,14 @@ using UnityEngine;
 using Utils.Extensions;
 using Utils.WeightRandom;
 
-namespace Maze.Generation.Separation
+namespace Maze.Generation.Separation.GatesGenerators
 {
-    [CreateAssetMenu(menuName = "DemonicOccupation/Maze/Separators/GatesGenerator", fileName = "TwoSidesSeparator")]
-    public class GatesGenerator: ScriptableObject
+    [CreateAssetMenu(menuName = "DemonicOccupation/Maze/GatesGenerators/RuledGatesGenerator")]
+    public class RuledGatesGenerator: GatesGeneratorBase
     {
         [SerializeField] private GateGenerationRule[] generationRules;
 
-        public void AddGates(Cell bottomLeft, Cell topRight, Direction dir)
+        public override void AddGates(Cell bottomLeft, Cell topRight, Direction dir)
         {
             var start = Mathf.Max(dir.MagnitudeCross(bottomLeft.BottomLeft), dir.MagnitudeCross(topRight.BottomLeft));
             var end = Mathf.Min(dir.MagnitudeCross(bottomLeft.TopRight), dir.MagnitudeCross(topRight.TopRight));

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Maze.Generation.Separation
+namespace Maze.Generation.Separation.Separators
 {
     public abstract class SeparatorBase: ScriptableObject
     {

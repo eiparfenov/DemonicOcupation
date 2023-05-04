@@ -1,18 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Maze.Generation.Separation.GatesGenerators;
 using Shared.Sides;
 using UnityEngine;
 using Utils.Extensions;
 
-namespace Maze.Generation.Separation
+namespace Maze.Generation.Separation.Separators
 {
     [CreateAssetMenu(menuName = "DemonicOccupation/Maze/Separators/CentralSquareSeparator")]
     public class CentralSquareSeparator: SeparatorBase
     {
         [SerializeField] private int minParentCellSize;
         [SerializeField] private int squareSide;
-        [SerializeField] private GatesGenerator centerGatesGenerator;
-        [SerializeField] private GatesGenerator sideGatesGenerator;
+        [SerializeField] private GatesGeneratorBase centerGatesGenerator;
+        [SerializeField] private GatesGeneratorBase sideGatesGenerator;
         public override List<Cell> Separate(Cell parentCell)
         {
             var topPoses = parentCell.PossibleSeparationPoses(Side.Top, minParentCellSize);
@@ -40,16 +41,16 @@ namespace Maze.Generation.Separation
             var cellBR = Cell.FromSides(poseTR.y, parentTR.x, parentBL.y, poseTR.x, parentCell);
 
             // Adds gates between center
-            centerGatesGenerator.AddGates(centerCell, cellTR, Direction.Vertical);
-            centerGatesGenerator.AddGates(centerCell, cellBR, Direction.Horizontal);
-            centerGatesGenerator.AddGates(cellTL, centerCell, Direction.Horizontal);
-            centerGatesGenerator.AddGates(cellBL, centerCell, Direction.Vertical);
+            centerGatesGenerator?.AddGates(centerCell, cellTR, Direction.Vertical);
+            centerGatesGenerator?.AddGates(centerCell, cellBR, Direction.Horizontal);
+            centerGatesGenerator?.AddGates(cellTL, centerCell, Direction.Horizontal);
+            centerGatesGenerator?.AddGates(cellBL, centerCell, Direction.Vertical);
             
             // Adds gates to sides
-            sideGatesGenerator.AddGates(cellTL, cellTR, Direction.Horizontal);
-            sideGatesGenerator.AddGates(cellBL, cellBR, Direction.Horizontal);
-            sideGatesGenerator.AddGates(cellBR, cellTR, Direction.Vertical);
-            sideGatesGenerator.AddGates(cellBL, cellTL, Direction.Vertical);
+            sideGatesGenerator?.AddGates(cellTL, cellTR, Direction.Horizontal);
+            sideGatesGenerator?.AddGates(cellBL, cellBR, Direction.Horizontal);
+            sideGatesGenerator?.AddGates(cellBR, cellTR, Direction.Vertical);
+            sideGatesGenerator?.AddGates(cellBL, cellTL, Direction.Vertical);
             
             return new List<Cell>() { centerCell, cellTR, cellTL, cellBR, cellBL };
         }

@@ -7,7 +7,7 @@ using Utils.Extensions;
 
 namespace Maze.Generation.Drawing
 {
-    [CreateAssetMenu(menuName = "DemonicOccupation/Maze/Generation/Drawers/BorderDrawer")]
+    [CreateAssetMenu(menuName = "DemonicOccupation/Maze/Drawers/BorderDrawer")]
     public class BorderDrawer: DrawerBase
     {
         [SerializeField] private TileBase borderTile;

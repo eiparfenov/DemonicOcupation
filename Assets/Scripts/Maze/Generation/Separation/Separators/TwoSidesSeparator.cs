@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Maze.Generation.Separation.GatesGenerators;
 using Shared.Sides;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Utils.Extensions;
 using Random = UnityEngine.Random;
 
-namespace Maze.Generation.Separation
+namespace Maze.Generation.Separation.Separators
 {
     [CreateAssetMenu(menuName = "DemonicOccupation/Maze/Separators/TwoSideSeparator", fileName = "TwoSidesSeparator")]
     public class TwoSidesSeparator: SeparatorBase
     {
         [SerializeField] private int minCellSize;
         [SerializeField] private float minCellPart;
-        [SerializeField] private GatesGenerator gatesGenerator;
+        [SerializeField] private GatesGeneratorBase gatesGenerator;
         public override List<Cell> Separate(Cell parentCell)
         {
             // Select direction
@@ -66,7 +65,7 @@ namespace Maze.Generation.Separation
                 separationDirection.ProjectCross(parentCell.BottomLeft) + separationDirection.Vector() * separator,
                 parentCell.TopRight,
                 parentCell);
-            gatesGenerator.AddGates(cellBL, cellTR, separationDirection);
+            gatesGenerator?.AddGates(cellBL, cellTR, separationDirection);
             return new List<Cell>() { cellBL, cellTR };
         }
     }

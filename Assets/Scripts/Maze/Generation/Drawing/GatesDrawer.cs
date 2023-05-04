@@ -6,7 +6,7 @@ using Utils.Extensions;
 
 namespace Maze.Generation.Drawing
 {
-    [CreateAssetMenu(menuName = "DemonicOccupation/Maze/Generation/Drawers/GatesDrawer")]
+    [CreateAssetMenu(menuName = "DemonicOccupation/Maze/Drawers/GatesDrawer")]
     public class GatesDrawer: DrawerBase
     {
         [SerializeField] private int width;
