@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-namespace Maze.Generation.Drawing
+namespace Maze.Generation.Drawing.Drawers
 {
     public abstract class DrawerBase: ScriptableObject
     {
@@ -14,6 +14,13 @@ namespace Maze.Generation.Drawing
             
             Debug.unityLogger.LogError(this.GetType().Name, $"No tilemap on layer {layer}");
             return default;
+        }
+
+        protected void SetTile(Dictionary<int, Tilemap> tilemaps, int layer, Vector3Int position, TileBase tile)
+        {
+            var tilemap = GetTilemap(tilemaps, layer);
+            tilemap.SetTile(position, null);
+            tilemap.SetTile(position, tile);
         }
     }
 }

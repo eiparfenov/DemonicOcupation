@@ -15,6 +15,7 @@ namespace Maze.Generation
         [SerializeField] private RoomVisualizer debugVisualizerPref;
 
         [SerializeField] private RoomVisualizer[] visualizers;
+        [SerializeField] private bool showVisualizers;
         [SerializeField] private int cellToDraw;
 
         private List<Cell> _cellsToDraw;
@@ -56,6 +57,14 @@ namespace Maze.Generation
             {
                 tilemap.Value.ClearAllTiles();
             }
+            if(visualizers == null) return;
+            foreach (var roomVisualizer in visualizers)
+            {
+                if (roomVisualizer)
+                {
+                    DestroyImmediate(roomVisualizer.gameObject);
+                }
+            }
         }
 
         private Dictionary<int, Tilemap> GetTilemaps()
@@ -82,11 +91,7 @@ namespace Maze.Generation
 
         private void ShowVisualizers(List<Cell> cells)
         {
-            foreach (var roomVisualizer in visualizers)
-            {
-                DestroyImmediate(roomVisualizer.gameObject);
-            }
-
+            if(!showVisualizers) return;
             visualizers = new RoomVisualizer[cells.Count];
             for (int i = 0; i < visualizers.Length; i++)
             {

@@ -11,7 +11,7 @@ namespace Maze.Generation.Separation.GatesGenerators
         {
             var start = Mathf.Max(dir.MagnitudeCross(bottomLeft.BottomLeft), dir.MagnitudeCross(topRight.BottomLeft));
             var end = Mathf.Min(dir.MagnitudeCross(bottomLeft.TopRight), dir.MagnitudeCross(topRight.TopRight));
-            var tr = Mathf.RoundToInt((start + end + gateLenght) / 2f + 6f * Random.value); // TODO: Remove debug "+ 2"
+            var tr = Mathf.RoundToInt((start + end + gateLenght) / 2f);
             var gate = new Gate()
             {
                 TopRight = dir.VectorCross() * tr + dir.Project(bottomLeft.TopRight),

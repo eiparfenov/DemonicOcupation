@@ -8,6 +8,7 @@ namespace Maze
     {
         public Vector2Int TopRight { get; set; }
         public Vector2Int BottomLeft => TopRight - Direction.VectorCross() * Length;
+        public Vector2Int Center => TopRight - Direction.VectorCross() * Length / 2;
         public int Length { get; set; }
         public Stack<Cell> TopRightCells { get; set; }
         public Stack<Cell> BottomLeftCells { get; set; }

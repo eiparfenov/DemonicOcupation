@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
-using Maze.Generation.Separation;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
 using Utils.Extensions;
 
-namespace Maze.Generation.Drawing
+namespace Maze.Generation.Drawing.Drawers
 {
     [CreateAssetMenu(menuName = "DemonicOccupation/Maze/Drawers/BorderDrawer")]
     public class BorderDrawer: DrawerBase
