@@ -16,9 +16,7 @@ namespace Maze
         public List<Gate> Gates { get; private set; }
         public List<Cell> Children { get; private set; }
 
-        private Cell()
-        {
-        }
+        private Cell() { }
 
         private void FillGates(Cell parent)
         {
@@ -70,6 +68,15 @@ namespace Maze
             //    .ToList();
 
             return result;
+        }
+
+        public IEnumerable<Vector2Int> AllPosesInside()
+        {
+            for (int x = BottomLeft.x; x < TopRight.x; x++)
+            for (int y = BottomLeft.y; y < TopRight.y; y++)
+            {
+                yield return new Vector2Int(x, y);
+            }
         }
 
         public static Cell FromCoords(Vector2Int bottomLeft, Vector2Int topRight, Cell parent)

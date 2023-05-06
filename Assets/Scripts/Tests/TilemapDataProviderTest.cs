@@ -2,6 +2,7 @@
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Utils.Extensions;
 
 namespace Tests
 {
@@ -16,7 +17,7 @@ namespace Tests
             var tilemap = GetComponent<Tilemap>();
             foreach (var tileInfo in tiles.GetTiles(rotation))
             {
-                tilemap.SetTile(tileInfo.Position, tileInfo.Tile);
+                tilemap.SetTile(tileInfo.Position.ToVector3Int(), tileInfo.Tile);
             }
         }
 

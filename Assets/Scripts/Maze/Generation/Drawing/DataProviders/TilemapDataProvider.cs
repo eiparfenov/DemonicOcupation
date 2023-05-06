@@ -32,7 +32,7 @@ namespace Maze.Generation.Drawing
                     var cellPosition = new Vector3Int(x, y, 0);
                     var tile = tilemap.GetTile(cellPosition);
                     if(tile == null) continue;
-                    tiles.Add(new TileInfo(tile, layer, cellPosition));
+                    tiles.Add(new TileInfo(tile, layer, (Vector2Int) cellPosition));
                 }
             }
 
@@ -56,11 +56,11 @@ namespace Maze.Generation.Drawing
                 {
                     0 => new TileInfo(tileInfo.Tile, tileInfo.Layer, tileInfo.Position),
                     1 => new TileInfo(tileInfo.Tile, tileInfo.Layer,
-                        new Vector3Int(tileInfo.Position.y, -tileInfo.Position.x) + Vector3Int.down),
+                        new Vector2Int(tileInfo.Position.y, -tileInfo.Position.x) + Vector2Int.down),
                     2 => new TileInfo(tileInfo.Tile, tileInfo.Layer,
-                        new Vector3Int(-tileInfo.Position.x, -tileInfo.Position.y) - Vector2Int.one.ToVector3Int()),
+                        new Vector2Int(-tileInfo.Position.x, -tileInfo.Position.y) - Vector2Int.one),
                     3 => new TileInfo(tileInfo.Tile, tileInfo.Layer,
-                        new Vector3Int(-tileInfo.Position.y, tileInfo.Position.x) + Vector3Int.left),
+                        new Vector2Int(-tileInfo.Position.y, tileInfo.Position.x) + Vector2Int.left),
                     _ => throw new ArgumentOutOfRangeException(nameof(rotation), rotation, null)
                 };
             }
@@ -72,9 +72,9 @@ namespace Maze.Generation.Drawing
     {
         [field: SerializeField] public TileBase Tile { get; private set; }
         [field: SerializeField] public int Layer { get; private set; }
-        [field: SerializeField] public Vector3Int Position { get; private set; }
+        [field: SerializeField] public Vector2Int Position { get; private set; }
 
-        public TileInfo(TileBase tile, int layer, Vector3Int position)
+        public TileInfo(TileBase tile, int layer, Vector2Int position)
         {
             Tile = tile;
             Layer = layer;

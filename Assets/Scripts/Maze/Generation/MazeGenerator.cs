@@ -37,16 +37,13 @@ namespace Maze.Generation
         {
             foreach (var cell in _cellsToDraw)
             {
-                settings.DebugDrawer.Draw(cell, _tilemaps);
-                settings.DebugGatesDrawer.Draw(cell, _tilemaps);
+                
             }
         }
         [Button()]
         private void DrawCell()
         {
-            var cell = _cellsToDraw[cellToDraw];
-            settings.DebugDrawer.Draw(cell, _tilemaps);
-            settings.DebugGatesDrawer.Draw(cell, _tilemaps);
+            
         }
 
 
