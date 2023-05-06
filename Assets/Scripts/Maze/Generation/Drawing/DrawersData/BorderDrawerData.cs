@@ -3,10 +3,10 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Utils.Extensions;
 
-namespace Maze.Generation.Drawing.Drawers
+namespace Maze.Generation.Drawing.DrawersData
 {
     [CreateAssetMenu(menuName = "DemonicOccupation/Maze/Drawers/BorderDrawer")]
-    public class BorderDrawer: DrawerBase
+    public class BorderDrawer: DrawerBaseData
     {
         [SerializeField] private TileBase borderTile;
         [SerializeField] private int borderSize;

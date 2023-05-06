@@ -5,10 +5,10 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Utils.Extensions;
 
-namespace Maze.Generation.Drawing.Drawers
+namespace Maze.Generation.Drawing.DrawersData
 {
     [CreateAssetMenu(menuName = "DemonicOccupation/Maze/Drawers/GatesDrawer")]
-    public class GatesDrawer: DrawerBase
+    public class GatesDrawer: DrawerBaseData
     {
         [SerializeField] private GateDataProvider gateTiles;
 

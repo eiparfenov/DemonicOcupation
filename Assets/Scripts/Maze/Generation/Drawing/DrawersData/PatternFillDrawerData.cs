@@ -3,11 +3,11 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Utils.Extensions;
 
-namespace Maze.Generation.Drawing.Drawers
+namespace Maze.Generation.Drawing.DrawersData
 {
     [CreateAssetMenu(menuName = "DemonicOccupation/Maze/Drawers/PatternFillDrawer")]
 
-    public class PatternFillDrawer: DrawerBase
+    public class PatternFillDrawer: DrawerBaseData
     {
         [SerializeField] private TilemapDataProvider pattern;
         public override void Draw(Cell cell, Dictionary<int, Tilemap> tilemaps)
@@ -41,7 +41,6 @@ namespace Maze.Generation.Drawing.Drawers
                             tileInfo.Tile);
                     }
                 }
-                    
             }
         }
     }

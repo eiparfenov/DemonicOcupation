@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-namespace Maze.Generation.Drawing.Drawers
+namespace Maze.Generation.Drawing.DrawersData
 {
     public abstract class DrawerBase: ScriptableObject
     {
